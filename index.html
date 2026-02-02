@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>日憩同盟｜公式勧誘処</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Noto+Serif+JP:wght@200;400;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --金: #d4af37;
+      --薄金: #fff3b0;
+      --葵: #020b1a;
+      --墨: #000000;
+      --背景陰影: radial-gradient(circle at center, #0a1c3d 0%, var(--葵) 100%);
+      --間隔-大: 100px;
+      --間隔-中: 40px;
+    }
+
+    body, html { 
+      margin: 0; padding: 0; 
+      background: var(--葵); 
+      color: #e8dcc0; 
+      font-family: "Shippori Mincho B1", serif; 
+      overflow: hidden; 
+      letter-spacing: 0.15em;
+    }
+
+    /* ===== 序幕：三日月の覚醒 ===== */
+    #opening { 
+      position: fixed; inset: 0; z-index: 9999; 
+      background: var(--墨); display: flex; justify-content: center; align-items: center; 
+      transition: opacity 2s ease-in-out; 
+    }
+    .stage { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; }
+    .moon { 
+      position: absolute; width: 100px; height: 100px; 
+      background: transparent; border-radius: 50%; 
+      box-shadow: -15px 5px 0 0 #1a1a1a;
+      transition: 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .moon.ignite { box-shadow: -15px 5px 0 0 var(--薄金); filter: drop-shadow(0 0 30px var(--金)); }
+    .guide-msg { position: absolute; bottom: 20%; letter-spacing: 1.2em; color: #333; transition: 2.5s ease-in-out; font-size: 0.9rem; }
+    .guide-msg.ignite { color: var(--金); text-shadow: 0 0 10px var(--金); }
+
+    /* ===== メインレイアウト ===== */
+    .page {
+      position: absolute; inset: 0; width: 100vw; height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 12vh 20px; opacity: 0; pointer-events: none;
+      transition: 1.2s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-sizing: border-box;
+      background: var(--背景陰影);
+    }
+    .page.active { opacity: 1; pointer-events: auto; }
+
+    /* タイトル背景ロゴ設定処 */
+    .brand-container {
+      position: relative;
+      margin-bottom: var(--間隔-大); /* タイトルとボタンの間の余白を拡大 */
+      padding: 40px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .guild-logo-layer {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px; /* ロゴの大きさ調整 */
+      opacity: 0.1; /* 透明度：薄く置くのが洗練のコツ */
+      z-index: 0;
+      pointer-events: none;
+      filter: grayscale(100%) sepia(100%) brightness(0.8); /* ロゴの色味を統一 */
+    }
+
+    h1 {
+      position: relative; z-index: 1; 
+      font-size: clamp(2rem, 10vw, 4rem); 
+      margin: 0; font-weight: 900; letter-spacing: 0.6em; padding-left: 0.6em;
+      color: var(--薄金);
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .tagline {
+      position: relative; z-index: 1;
+      margin-top: 25px; font-size: 0.9rem; color: var(--金);
+      letter-spacing: 0.8em; opacity: 0.8;
+    }
+
+    /* ===== ボタン・お品書き ===== */
+    .menu-group {
+      display: flex; flex-direction: column; gap: 20px; /* ボタン同士の間隔 */
+      width: 100%; max-width: 300px;
+    }
+    .menu-btn {
+      position: relative;
+      padding: 18px 0;
+      background: transparent;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--金);
+      font-family: inherit; font-size: 0.95rem; letter-spacing: 0.5em;
+      text-decoration: none; text-align: center;
+      cursor: pointer; transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+      overflow: hidden;
+    }
+    .menu-btn:hover {
+      border-color: var(--金);
+      color: var(--薄金);
+      background: rgba(212, 175, 55, 0.08);
+      letter-spacing: 0.7em; /* ホバーで少し広がる演出 */
+    }
+
+    /* ===== サブページ・コンテナ ===== */
+    .content-card {
+      width: 100%; max-width: 700px;
+      padding: 60px 40px;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid var(--金);
+      border-bottom: 1px solid var(--金);
+    }
+    h2 { 
+      font-size: 1.4rem; color: var(--薄金); font-weight: 400;
+      margin-bottom: 50px; text-align: center; letter-spacing: 0.4em;
+    }
+    .clause-item { margin-bottom: 40px; }
+    .clause-no { color: var(--金); font-size: 0.8rem; display: block; margin-bottom: 10px; border-bottom: 1px solid rgba(212,175,55,0.2); width: 40px; }
+    .clause-text { line-height: 2; font-size: 0.95rem; }
+
+    .back-nav { margin-top: 60px; font-size: 0.8rem; color: var(--金); cursor: pointer; border-bottom: 1px solid; padding-bottom: 5px; opacity: 0.6; transition: 0.3s; }
+    .back-nav:hover { opacity: 1; letter-spacing: 0.3em; }
+
+    .haku { position: fixed; background: var(--金); pointer-events: none; z-index: 1000; }
+  </style>
+</head>
+<body>
+
+<div id="opening" onclick="igniteMoon()">
+  <div class="stage">
+    <div id="moon-obj" class="moon"></div>
+    <p id="guide-text" class="guide-msg">触れて、夜を照らせ</p>
+  </div>
+</div>
+
+<div id="home" class="page active">
+  <div class="brand-container">
+    <img src="nikkoilog.png" alt="" class="guild-logo-layer" onerror="this.style.display='none';">
+    <h1>日憩同盟</h1>
+    <p class="tagline">戦乱の世にも、憩いあり</p>
+  </div>
+  
+  <nav class="menu-group">
+    <div class="menu-btn" onclick="showPage('history')">歴史</div>
+    <div class="menu-btn" onclick="showPage('rules')">掟</div>
+    <div class="menu-btn" onclick="showPage('reqs')">募集要項</div>
+    <div class="menu-btn" onclick="showPage('join')">加入</div>
+    <a href="#" target="_blank" class="menu-btn" style="border-color: rgba(255,255,255,0.1); font-size: 0.8rem;">映像処</a>
+  </nav>
+</div>
+
+<div id="history" class="page">
+  <div class="content-card">
+    <h2>歴史</h2>
+    <div style="border-left: 1px solid var(--金); padding-left: 30px; margin-left: 10px;">
+      <div class="clause-item">
+        <span class="clause-no">記</span>
+        <p class="clause-text"><strong>十二月二十九日</strong><br>S55 怪力無双 九州にて創設</p>
+      </div>
+    </div>
+    <div class="back-nav" onclick="showPage('home')">拠点へ戻る</div>
+  </div>
+</div>
+
+<div id="rules" class="page">
+  <div class="content-card">
+    <h2>盟約の掟</h2>
+    <div class="clause-item">
+      <span class="clause-no">一</span>
+      <p class="clause-text">年齢や性別を問わず、常に敬意を持って接すること。言葉遣いや態度には細心の注意を払い、不快な言動を慎むべし。</p>
+    </div>
+    <div class="clause-item">
+      <span class="clause-no">二</span>
+      <p class="clause-text">攻城戦等の参陣に際しては、事前に戦力を確認し、円滑な運用に協力すること。仲間の配慮を忘れてはならぬ。</p>
+    </div>
+    <div class="clause-item">
+      <span class="clause-no">三</span>
+      <p class="clause-text">個人攻撃、性的表現、思想に関する議論は厳禁。私的な相談はDMを使い、不快な行為も控えよ。</p>
+    </div>
+    <div class="clause-item">
+      <span class="clause-no">四</span>
+      <p class="clause-text">急用や長期不在の場合は、必ず盟主または副盟主へ報告を入れること。無断での離脱は禁ずる。</p>
+    </div>
+    <div class="back-nav" onclick="showPage('home')">拠点へ戻る</div>
+  </div>
+</div>
+
+<div id="reqs" class="page">
+  <div class="content-card">
+    <h2>募集要項</h2>
+    <div class="clause-item">
+      <span class="clause-no">一</span>
+      <p class="clause-text">盟約の掟を深く理解し、これを遵守できる者。和を尊び、仲間の憩いを守れる者を求む。</p>
+    </div>
+    <div class="clause-item">
+      <span class="clause-no">二</span>
+      <p class="clause-text">不測の事態を除き、日に一度は連絡の確認および返信を行える者。迅速な意思疎通は強固な絆の礎なり。</p>
+    </div>
+    <div class="back-nav" onclick="showPage('home')">拠点へ戻る</div>
+  </div>
+</div>
+
+<div id="join" class="page">
+  <div class="content-card" style="text-align: center;">
+    <h2>加入の儀</h2>
+    <p class="clause-text">共に歴史を刻む同志を、此処に待つ。</p>
+    <div style="margin: 40px 0;">
+      <a href="#" class="menu-btn" style="display: block; width: 200px; margin: 0 auto;">Discord 参陣</a>
+    </div>
+    <p style="font-size: 0.8rem; color: var(--金);">符号：XXXX-XXXX-XXXX</p>
+    <div class="back-nav" onclick="showPage('home')">拠点へ戻る</div>
+  </div>
+</div>
+
+<script>
+  let isIgnited = false;
+  function igniteMoon() {
+    if(isIgnited) return;
+    isIgnited = true;
+    document.getElementById('moon-obj').classList.add('ignite');
+    document.getElementById('guide-text').classList.add('ignite');
+    setTimeout(() => {
+      document.getElementById('opening').style.opacity = '0';
+      setTimeout(() => document.getElementById('opening').style.display = 'none', 2000);
+    }, 2800);
+  }
+
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(pageId);
+    target.classList.add('active');
+    target.scrollTop = 0;
+  }
+
+  function createHaku() {
+    const haku = document.createElement('div');
+    haku.className = 'haku';
+    const size = Math.random() * 2 + 1;
+    haku.style.width = size + 'px'; haku.style.height = size + 'px';
+    haku.style.left = Math.random() * 100 + 'vw'; haku.style.top = '-10px';
+    document.body.appendChild(haku);
+    haku.animate([
+      { transform: 'translateY(0) rotate(0deg)', opacity: 0.4 },
+      { transform: `translateY(110vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+    ], { duration: 8000 + Math.random() * 4000 });
+    setTimeout(() => haku.remove(), 12000);
+  }
+  setInterval(createHaku, 1000);
+</script>
+
+</body>
+</html>
